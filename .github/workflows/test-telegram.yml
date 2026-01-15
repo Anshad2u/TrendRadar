@@ -1,0 +1,25 @@
+name: Test Telegram
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Test Telegram Notification
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: |
+          echo "Testing Telegram notification..."
+          echo "Bot Token: ${TELEGRAM_BOT_TOKEN:0:10}..."
+          echo "Chat ID: $TELEGRAM_CHAT_ID"
+          
+          # Test the Telegram API
+          curl -s -X POST "https://api.telegram.org/bot$TELEGRAM_BOT_TOKEN/sendMessage" \
+            -d chat_id="$TELEGRAM_CHAT_ID" \
+            -d text="✅ Test notification from TrendRadar! Your setup is working." \
+            -d parse_mode="Markdown"
+          
+          echo "Telegram test completed"
